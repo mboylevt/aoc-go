@@ -23,10 +23,10 @@ func init() {
 
 func main() {
 	var part int
-	flag.IntVar(&part, "part", 2, "part 1 or 2")
+	flag.IntVar(&part, "part", 1, "part 1 or 2")
 	flag.Parse()
 	fmt.Println("Running part", part)
-	// input := "14\n1969\n100756"
+
 	if part == 1 {
 		ans := part1(input)
 		util.CopyToClipboard(fmt.Sprintf("%v", ans))
@@ -40,35 +40,13 @@ func main() {
 
 func part1(input string) int {
 	parsed := parseInput(input)
-	var sumFuel int = 0
-	for _, v := range parsed {
-		sumFuel += calcSingleFuel(v)
-	}
-	return sumFuel
+	_ = parsed
+
+	return 0
 }
 
 func part2(input string) int {
-	parsed := parseInput(input)
-	var sumFuel int = 0
-	for _, v := range parsed {
-		sumFuel += recursiveFuel(v)
-	}
-	return sumFuel
-}
-
-func recursiveFuel(input int) int {
-	var fuelReq = calcSingleFuel(input)
-	var runningTotal = fuelReq
-	for fuelReq > 6 { //this ensures that the final result will be greater than 0
-		var newFuelReq = calcSingleFuel(fuelReq)
-		runningTotal += newFuelReq
-		fuelReq = newFuelReq
-	}
-	return runningTotal
-}
-
-func calcSingleFuel(input int) int {
-	return (input / 3) - 2
+	return 0
 }
 
 func parseInput(input string) (ans []int) {
