@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/mboylevt/aoc-go/cast"
-	"github.com/mboylevt/aoc-go/intcode"
+	intcode "github.com/mboylevt/aoc-go/lib"
 	"github.com/mboylevt/aoc-go/util"
 )
 
