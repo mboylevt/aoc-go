@@ -40,9 +40,7 @@ func main() {
 
 func part1(input string) int {
 	parsed := parseInput(input)
-	_ = parsed
-
-	return 0
+	return util.IntCode(parsed)
 }
 
 func part2(input string) int {
@@ -50,7 +48,7 @@ func part2(input string) int {
 }
 
 func parseInput(input string) (ans []int) {
-	for _, line := range strings.Split(input, "\n") {
+	for _, line := range strings.Split(input, ",") {
 		ans = append(ans, cast.ToInt(line))
 	}
 	return ans
