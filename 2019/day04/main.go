@@ -2,7 +2,6 @@ package main
 
 import (
 	_ "embed"
-	"flag"
 	"fmt"
 	"strings"
 
@@ -22,35 +21,79 @@ func init() {
 }
 
 func main() {
-	var part int
-	flag.IntVar(&part, "part", 1, "part 1 or 2")
-	flag.Parse()
-	fmt.Println("Running part", part)
 
-	if part == 1 {
-		ans := part1(input)
-		util.CopyToClipboard(fmt.Sprintf("%v", ans))
-		fmt.Println("Output:", ans)
-	} else {
-		ans := part2(input)
-		util.CopyToClipboard(fmt.Sprintf("%v", ans))
-		fmt.Println("Output:", ans)
-	}
+	// ans := part1(input)
+	// util.CopyToClipboard(fmt.Sprintf("%v", ans))
+	// fmt.Println("Output1:", ans)
+	ans := part2(input)
+	util.CopyToClipboard(fmt.Sprintf("%v", ans))
+	fmt.Println("Output2:", ans)
 }
 
 func part1(input string) int {
 	parsed := parseInput(input)
-	_ = parsed
+	start := parsed[0]
+	end := parsed[1]
+	validPWCount := 0
+	for i := start; i <= end; i++ {
+		if evaluateEntry(cast.ToString(i), 1) {
+			validPWCount++
+		}
+	}
 
-	return 0
+	return validPWCount
 }
 
 func part2(input string) int {
-	return 0
+	parsed := parseInput(input)
+	start := parsed[0]
+	end := parsed[1]
+	validPWCount := 0
+	for i := start; i <= end; i++ {
+		if evaluateEntry(cast.ToString(i), 2) {
+			fmt.Printf("Valid: %v\n", i)
+			validPWCount++
+		}
+	}
+
+	return validPWCount
+}
+
+func evaluateEntry(entry string, part int) bool {
+	adjacent := false
+	// fmt.Printf("Evaluating %v\n", entry)
+	pairIdx := -1
+	for idx, c := range entry[:len(entry)-1] {
+		current := cast.ToString(c)
+		next := cast.ToString(entry[idx+1])
+		if current == next {
+			adjacent = true
+			if pairIdx == -1 {
+				pairIdx = idx
+			}
+
+			// fmt.Printf("\tFound adjacent numbers: %v at index %v,%v\n", current, idx, idx+1)
+			if part == 2 {
+				if idx-1 >= 0 {
+					prior := cast.ToString(entry[idx-1])
+					if prior == next && pairIdx == idx-1 {
+						// fmt.Printf("\tFailure - group too large: Entry %v, %v at index %v\n", entry, prior, idx-1)
+						adjacent = false
+					}
+				}
+			}
+		}
+		if next < current {
+			// fmt.Printf("\tFailure: %v descending when compared to %v\n", next, current)
+			return false
+		}
+	}
+	// fmt.Printf("\tEvauation complete for %v: result %v\n", entry, adjacent)
+	return adjacent
 }
 
 func parseInput(input string) (ans []int) {
-	for _, line := range strings.Split(input, "\n") {
+	for _, line := range strings.Split(input, "-") {
 		ans = append(ans, cast.ToInt(line))
 	}
 	return ans
