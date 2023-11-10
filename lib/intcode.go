@@ -144,9 +144,7 @@ func RunProgram(program []int) int {
 		} else {
 			ip += instruction.advance
 		}
-
 	}
-	return 0
 }
 
 func RunProgramDay2(program []int) int {
