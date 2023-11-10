@@ -41,7 +41,7 @@ func main() {
 
 func part1(input string) int {
 	parsed := parseInput(input)
-	return intcode.RunProgram(parsed)
+	return intcode.RunProgramDay2(parsed)
 }
 
 func part2(input string) int {
@@ -50,8 +50,8 @@ func part2(input string) int {
 			parsed := parseInput(input)
 			parsed[1] = noun
 			parsed[2] = verb
-			var final_val = intcode.RunProgram(parsed)
-			fmt.Printf("N: %v V: %v Result: %v\n", noun, verb, final_val)
+			var final_val = intcode.RunProgramDay2(parsed)
+			// fmt.Printf("N: %v V: %v Result: %v\n", noun, verb, final_val)
 			if final_val == 19690720 {
 				return 100*noun + verb
 			}

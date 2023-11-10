@@ -20,6 +20,8 @@ func ToInt(arg interface{}) int {
 		if err != nil {
 			panic("error converting string to int " + err.Error())
 		}
+	case byte:
+		val = int(arg.(byte))
 	default:
 		panic(fmt.Sprintf("unhandled type for int casting %T", arg))
 	}

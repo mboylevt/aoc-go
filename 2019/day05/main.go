@@ -2,12 +2,11 @@ package main
 
 import (
 	_ "embed"
-	"flag"
 	"fmt"
 	"strings"
 
 	"github.com/mboylevt/aoc-go/cast"
-	"github.com/mboylevt/aoc-go/util"
+	intcode "github.com/mboylevt/aoc-go/lib"
 )
 
 //go:embed input.txt
@@ -22,35 +21,29 @@ func init() {
 }
 
 func main() {
-	var part int
-	flag.IntVar(&part, "part", 1, "part 1 or 2")
-	flag.Parse()
-	fmt.Println("Running part", part)
+	// fmt.Println("Running part 1")
+	// ans := part1(input)
+	// util.CopyToClipboard(fmt.Sprintf("%v", ans))
 
-	if part == 1 {
-		ans := part1(input)
-		util.CopyToClipboard(fmt.Sprintf("%v", ans))
-		fmt.Println("Output:", ans)
-	} else {
-		ans := part2(input)
-		util.CopyToClipboard(fmt.Sprintf("%v", ans))
-		fmt.Println("Output:", ans)
-	}
+	fmt.Println("Running part 2")
+	part2(input)
+
 }
 
 func part1(input string) int {
 	parsed := parseInput(input)
-	_ = parsed
-
+	intcode.RunProgram(parsed)
 	return 0
 }
 
 func part2(input string) int {
+	parsed := parseInput(input)
+	intcode.RunProgram(parsed)
 	return 0
 }
 
 func parseInput(input string) (ans []int) {
-	for _, line := range strings.Split(input, "\n") {
+	for _, line := range strings.Split(input, ",") {
 		ans = append(ans, cast.ToInt(line))
 	}
 	return ans
