@@ -2,11 +2,11 @@ package main
 
 import (
 	_ "embed"
-	"flag"
 	"fmt"
 	"strings"
 
 	"github.com/mboylevt/aoc-go/cast"
+	mafs "github.com/mboylevt/aoc-go/lib"
 	"github.com/mboylevt/aoc-go/util"
 )
 
@@ -22,26 +22,27 @@ func init() {
 }
 
 func main() {
-	var part int
-	flag.IntVar(&part, "part", 1, "part 1 or 2")
-	flag.Parse()
-	fmt.Println("Running part", part)
 
-	if part == 1 {
-		ans := part1(input)
-		util.CopyToClipboard(fmt.Sprintf("%v", ans))
-		fmt.Println("Output:", ans)
-	} else {
-		ans := part2(input)
-		util.CopyToClipboard(fmt.Sprintf("%v", ans))
-		fmt.Println("Output:", ans)
-	}
+	ans := part1(input)
+	util.CopyToClipboard(fmt.Sprintf("%v", ans))
+	fmt.Println("Output:", ans)
+	ans = part2(input)
+	util.CopyToClipboard(fmt.Sprintf("%v", ans))
+	fmt.Println("Output:", ans)
+
 }
 
 func part1(input string) int {
 	parsed := parseInput(input)
 	_ = parsed
-
+	permutations := mafs.Permutations([]int{0, 1, 2, 3, 4})
+	max_thruster := 0
+	for _, perm := range(permutations) {
+		input := 0
+		for _, phase := perm {
+			
+		}
+	}
 	return 0
 }
 
@@ -50,7 +51,7 @@ func part2(input string) int {
 }
 
 func parseInput(input string) (ans []int) {
-	for _, line := range strings.Split(input, "\n") {
+	for _, line := range strings.Split(input, ",") {
 		ans = append(ans, cast.ToInt(line))
 	}
 	return ans

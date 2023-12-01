@@ -32,13 +32,13 @@ func main() {
 
 func part1(input string) int {
 	parsed := parseInput(input)
-	intcode.RunProgram(parsed)
+	intcode.RunProgramDay5(parsed)
 	return 0
 }
 
 func part2(input string) int {
 	parsed := parseInput(input)
-	intcode.RunProgram(parsed)
+	intcode.RunProgramDay5(parsed)
 	return 0
 }
 

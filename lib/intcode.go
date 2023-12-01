@@ -131,7 +131,23 @@ func executeInstruction(program []int, ins instruction, ip *int) int {
 	return 0
 }
 
-func RunProgram(program []int) int {
+func RunProgramDay7(program []int) int {
+	ip := 0
+	for {
+		instruction := parseInstruction(program, ip)
+		if instruction.operation == 99 {
+			return 0
+		}
+		jmp := executeInstruction(program, instruction, &ip)
+		if jmp > 0 {
+			ip += jmp
+		} else {
+			ip += instruction.advance
+		}
+	}
+}
+
+func RunProgramDay5(program []int) int {
 	ip := 0
 	for {
 		instruction := parseInstruction(program, ip)
