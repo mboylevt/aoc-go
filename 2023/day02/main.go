@@ -100,6 +100,34 @@ func part2(input string) int {
 	_ = parsed
 	sum := 0
 
+	// set max conditions
+
+	var games []map[int][]game
+	for _, line := range parsed {
+		games = append(games, gameParser(line))
+	}
+	for _, g := range games {
+		redMax := 0
+		greenMax := 0
+		blueMax := 0
+		var gameId int
+		for k, _ := range g {
+			gameId = k
+		}
+		cubeSets := g[gameId]
+		for _, cubeSet := range cubeSets {
+			if cubeSet.red > redMax {
+				redMax = cubeSet.red
+			}
+			if cubeSet.green > greenMax {
+				greenMax = cubeSet.green
+			}
+			if cubeSet.blue > blueMax {
+				blueMax = cubeSet.blue
+			}
+		}
+		sum += redMax * blueMax * greenMax
+	}
 	return sum
 }
 
