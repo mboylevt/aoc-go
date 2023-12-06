@@ -75,6 +75,23 @@ func getMappedNumber(block [][]int, seed int) int {
 	return seed
 }
 
+func identifySeeds(input string) []int {
+	var seedSlice []int
+	var seeds []int
+	seedStr := strings.Split(input, ": ")[1]
+	for _, str := range strings.Fields(seedStr) {
+		seedSlice = append(seedSlice, cast.ToInt(str))
+	}
+	for i := 0; i < len(seedSlice); i += 2 {
+		start := seedSlice[i]
+		size := seedSlice[i+1]
+		for j := 0; j < size; j++ {
+			seeds = append(seeds, start+j)
+		}
+	}
+	return seeds
+}
+
 func part1(input string) int {
 	parsed := parseInput(input)
 	seeds := getSeeds(parsed[0])
@@ -90,7 +107,17 @@ func part1(input string) int {
 }
 
 func part2(input string) int {
-	return 0
+	parsed := parseInput(input)
+	seeds := identifySeeds(parsed[0])
+	blocks := getBlocks(parsed[1:])
+
+	for _, block := range blocks {
+		for idx, seed := range seeds {
+			seeds[idx] = getMappedNumber(block, seed)
+		}
+	}
+
+	return lib.FindMinimum(seeds)
 }
 
 func parseInput(input string) (ans []string) {
