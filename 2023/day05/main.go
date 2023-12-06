@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/mboylevt/aoc-go/cast"
+	"github.com/mboylevt/aoc-go/lib"
 	"github.com/mboylevt/aoc-go/util"
 )
 
@@ -44,46 +45,48 @@ func getSeeds(input string) []int {
 	return seedSlice
 }
 
-func getBlocks(input []string) [][]int {
-	var blocks [][]int
+func getBlocks(input []string) [][][]int {
+	var blocks [][][]int
 	for _, rule := range input {
+		var block [][]int
 		for _, bString := range strings.Split(rule, "\n")[1:] {
-			var block []int
+			var rng []int
 			bFields := strings.Fields(bString)
 			for _, field := range bFields {
-				block = append(block, cast.ToInt(field))
+				rng = append(rng, cast.ToInt(field))
 			}
-			blocks = append(blocks, block)
+			block = append(block, rng)
 		}
+		blocks = append(blocks, block)
 	}
 
 	return blocks
 }
 
-func getMappedNumber(block []int, seed int) int {
-	dr := block[0]
-	sr := block[1]
-	rl := block[2]
-	if sr <= seed && seed <= sr+rl {
-		return dr + seed - sr
+func getMappedNumber(block [][]int, seed int) int {
+	for _, rng := range block {
+		dr := rng[0]
+		sr := rng[1]
+		rl := rng[2]
+		if sr <= seed && seed <= sr+rl {
+			return dr + seed - sr
+		}
 	}
 	return seed
 }
 
 func part1(input string) int {
 	parsed := parseInput(input)
-
 	seeds := getSeeds(parsed[0])
 	blocks := getBlocks(parsed[1:])
-	// _ = seeds
-	// _ = blocks
+
 	for _, block := range blocks {
 		for idx, seed := range seeds {
 			seeds[idx] = getMappedNumber(block, seed)
 		}
 	}
 
-	return 0
+	return lib.FindMinimum(seeds)
 }
 
 func part2(input string) int {

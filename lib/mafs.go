@@ -34,3 +34,13 @@ func Permutations(arr []int) [][]int {
 	helper(arr, len(arr))
 	return res
 }
+
+func FindMinimum(a []int) int {
+	min := a[0]
+	for _, n := range a {
+		if min > n {
+			min = n
+		}
+	}
+	return min
+}
