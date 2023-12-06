@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/mboylevt/aoc-go/cast"
 	"github.com/mboylevt/aoc-go/util"
 )
 
@@ -26,16 +25,13 @@ func main() {
 	flag.IntVar(&part, "part", 1, "part 1 or 2")
 	flag.Parse()
 	fmt.Println("Running part", part)
+	ans := part1(input)
+	util.CopyToClipboard(fmt.Sprintf("%v", ans))
+	fmt.Println("Output:", ans)
+	ans = part2(input)
+	util.CopyToClipboard(fmt.Sprintf("%v", ans))
+	fmt.Println("Output:", ans)
 
-	if part == 1 {
-		ans := part1(input)
-		util.CopyToClipboard(fmt.Sprintf("%v", ans))
-		fmt.Println("Output:", ans)
-	} else {
-		ans := part2(input)
-		util.CopyToClipboard(fmt.Sprintf("%v", ans))
-		fmt.Println("Output:", ans)
-	}
 }
 
 func part1(input string) int {
@@ -49,9 +45,7 @@ func part2(input string) int {
 	return 0
 }
 
-func parseInput(input string) (ans []int) {
-	for _, line := range strings.Split(input, "\n") {
-		ans = append(ans, cast.ToInt(line))
-	}
+func parseInput(input string) (ans []string) {
+	ans = append(ans, strings.Split(input, "\n")...)
 	return ans
 }

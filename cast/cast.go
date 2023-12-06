@@ -79,3 +79,12 @@ func ToASCIICode(arg interface{}) int {
 func ASCIIIntToChar(code int) string {
 	return string(rune(code))
 }
+
+// StringSliceToIntSlice takes a []string and returns the []int
+func StringSliceToIntSlice(input []string) []int {
+	var intSlice []int
+	for _, str := range input {
+		intSlice = append(intSlice, ToInt(str))
+	}
+	return intSlice
+}
