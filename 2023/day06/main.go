@@ -2,7 +2,6 @@ package main
 
 import (
 	_ "embed"
-	"flag"
 	"fmt"
 	"strings"
 
@@ -22,20 +21,32 @@ func init() {
 }
 
 func main() {
-	var part int
-	flag.IntVar(&part, "part", 1, "part 1 or 2")
-	flag.Parse()
-	fmt.Println("Running part", part)
+	fmt.Println("Running part 1")
+	ans := part1(input)
+	util.CopyToClipboard(fmt.Sprintf("%v", ans))
+	fmt.Println("Output:", ans)
+	fmt.Println("Running part 2")
+	ans = part2(input)
+	util.CopyToClipboard(fmt.Sprintf("%v", ans))
+	fmt.Println("Output:", ans)
+}
 
-	if part == 1 {
-		ans := part1(input)
-		util.CopyToClipboard(fmt.Sprintf("%v", ans))
-		fmt.Println("Output:", ans)
-	} else {
-		ans := part2(input)
-		util.CopyToClipboard(fmt.Sprintf("%v", ans))
-		fmt.Println("Output:", ans)
+func getRecordBreaks(time int, record int) int {
+	max := time / 2
+	result := record + 1
+	breaks := 0
+	//start in the middle, go backwards until we lose
+	for i := max; result > record; i-- {
+		result = (time - i) * (time - (time - i))
+		if result > record {
+			breaks++
+		}
 	}
+	breaks *= 2
+	if time%2 == 0 {
+		breaks -= 1
+	}
+	return breaks
 }
 
 func part1(input string) int {
@@ -44,26 +55,9 @@ func part1(input string) int {
 	times := cast.StringSliceToIntSlice(strings.Fields(strings.Split(parsed[0], ":")[1]))
 	records := cast.StringSliceToIntSlice(strings.Fields(strings.Split(parsed[1], ":")[1]))
 	var newRecordCounts []int
-
 	for idx, time := range times {
-		record := records[idx]
-		max := time / 2
-		result := record + 1
-		breaks := 0
-		//start in the middle, go backwards until we lose
-		for i := max; result > record; i-- {
-			result = (time - i) * (time - (time - i))
-			if result > record {
-				breaks++
-			}
-		}
-		breaks *= 2
-		if time%2 == 0 {
-			breaks -= 1
-		}
-		newRecordCounts = append(newRecordCounts, breaks)
+		newRecordCounts = append(newRecordCounts, getRecordBreaks(time, records[idx]))
 	}
-
 	mult := 1
 	for _, count := range newRecordCounts {
 		mult *= count
@@ -72,7 +66,11 @@ func part1(input string) int {
 }
 
 func part2(input string) int {
-	return 0
+	parsed := parseInput(input)
+	_ = parsed
+	time := cast.ToInt(strings.Join(strings.Fields(strings.Split(parsed[0], ":")[1]), ""))
+	record := cast.ToInt(strings.Join(strings.Fields(strings.Split(parsed[1], ":")[1]), ""))
+	return getRecordBreaks(time, record)
 }
 
 func parseInput(input string) (ans []string) {
