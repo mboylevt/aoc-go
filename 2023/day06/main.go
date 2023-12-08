@@ -32,7 +32,7 @@ func main() {
 
 	fmt.Println("Running part dumb")
 	start = time.Now()
-	ans = part2(input)
+	ans = partDumb(input)
 	elapsed = time.Since(start)
 	util.CopyToClipboard(fmt.Sprintf("%v", ans))
 	fmt.Println("Output:", ans)
@@ -95,7 +95,7 @@ func partDumb(input string) int {
 	_ = parsed
 	time := cast.ToInt(strings.Join(strings.Fields(strings.Split(parsed[0], ":")[1]), ""))
 	record := cast.ToInt(strings.Join(strings.Fields(strings.Split(parsed[1], ":")[1]), ""))
-	result := record + 1
+	result := 0
 	breaks := 0
 	// do it st00p
 	for i := 0; i < time; i++ {
