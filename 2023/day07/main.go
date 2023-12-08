@@ -64,6 +64,22 @@ var values = map[byte]int{
 	'A': 12,
 }
 
+var valuesJoker = map[byte]int{
+	'J': 0,
+	'2': 1,
+	'3': 2,
+	'4': 3,
+	'5': 4,
+	'6': 5,
+	'7': 6,
+	'8': 7,
+	'9': 8,
+	'T': 9,
+	'Q': 10,
+	'K': 11,
+	'A': 12,
+}
+
 const (
 	highCard handType = iota
 	onePair
@@ -112,6 +128,65 @@ func typeFromCards(in string) (out handType) {
 	return out
 }
 
+func typeFromCardsJoker(in string) (out handType) {
+	sets := map[int][]byte{}
+	jokerCount := 0
+	for len(in) > 0 {
+		card := in[0]
+		count := 0
+		for i := range in {
+			if in[i] == card {
+				count++
+			}
+		}
+		if card == 'J' {
+			jokerCount = count
+		} else {
+			sets[count] = append(sets[count], card)
+		}
+		in = strings.ReplaceAll(in, in[0:1], "")
+	}
+	jokerBoost := []handType{onePair, threeKind, fourKind, fiveKind}
+	switch {
+	case sets[5] != nil:
+		out = fiveKind
+	case sets[4] != nil:
+		out = fourKind
+		if jokerCount > 0 {
+			out = fiveKind
+		}
+	case sets[3] != nil:
+		if sets[2] != nil {
+			out = fullHouse
+		} else {
+			out = threeKind
+			if jokerCount > 0 {
+				out = jokerBoost[jokerCount+1]
+			}
+		}
+	case sets[2] != nil:
+		if len(sets[2]) == 2 {
+			out = twoPair
+			if jokerCount > 0 {
+				out = fullHouse
+			}
+		} else {
+			out = onePair
+			if jokerCount > 0 {
+				out = jokerBoost[jokerCount]
+			}
+		}
+	default:
+		out = highCard
+		if jokerCount == 5 {
+			out = fiveKind
+		} else if jokerCount > 0 {
+			out = jokerBoost[jokerCount-1]
+		}
+	}
+	return out
+}
+
 func (h *hand) less(other hand, valResolutions map[byte]int) bool {
 	if h.ht == other.ht {
 		for i := range h.cards {
@@ -146,7 +221,24 @@ func part1(input string) int {
 }
 
 func part2(input string) int {
-	return 0
+	parsed := parseInput(input)
+	_ = parsed
+	var hands []hand
+	for _, line := range parsed {
+		fields := strings.Fields(line)
+		cards := fields[0]
+		bid := cast.ToInt(fields[1])
+		hands = append(hands, hand{cards, bid, typeFromCardsJoker(cards)})
+	}
+	sort.Slice(hands, func(i, j int) bool {
+		return hands[i].less(hands[j], valuesJoker)
+	})
+	fmt.Println("hi")
+	winnings := 0
+	for i, h := range hands {
+		winnings += (i + 1) * h.bid
+	}
+	return winnings
 }
 
 func parseInput(input string) (ans []string) {
