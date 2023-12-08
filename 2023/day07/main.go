@@ -44,8 +44,6 @@ type (
 	}
 
 	handType int
-
-	typeCompute func(string) handType
 )
 
 var values = map[byte]int{
